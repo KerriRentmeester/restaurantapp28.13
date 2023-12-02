@@ -1,6 +1,6 @@
-//this magically appeared in 28.12. 
-// The video did not show the code, so I guessed by taking code from starter file folder: GraphQL squema.... It looks like the only diff from vid and this file is the first 4 import lines
-
+//this file magically appeared in 28.12. 
+// The video did not show the code, so I guessed by taking code from starter file folder: GraphQL squema.... 
+// in vid 28.16 @ 8:20, the following code is displayed. I edited it accordingly (by adding code and commenting out the unneeded code at thsi time).
 
 import {useRouter} from "next/router"
 import {gql,useQuery} from '@apollo/client';
@@ -17,8 +17,27 @@ import {
   Col} from "reactstrap";
 function Dishes({restId}){
   const [restaurantID, setRestaurantID] = useState()
-  const {addItem} = useContext(AppContext)
+  //const {addItem} = useContext(AppContext)
+  //return all restaurants and all dishes
+  const GET_RESTAURANTS = gql`
+  query {
+    restaurants {
+      id
+      name
+      dishes {
+        id
+        name
+        description
+        price
+        image {
+        url
+        }
+      }
+    }
+  }
+`;
 
+// return the selected restaurant 
 const GET_RESTAURANT_DISHES = gql`
   query($id: ID!) {
     restaurant(id: $id) {
@@ -36,19 +55,19 @@ const GET_RESTAURANT_DISHES = gql`
     }
   }
 `;
-
+console.log(`restaurant = ${restaurantID}`)
   const router = useRouter();
 
   const { loading, error, data } = useQuery(GET_RESTAURANT_DISHES, {
     variables: { id: restId},
   });
-
+  console.log(data)
   if (loading) return <p>Loading...</p>;
   if (error) return <p>ERROR here</p>;
   if (!data) return <p>Not found</p>;
 
   let restaurant = data.restaurant;
-
+  console.log(restID)
   if (restId > 0){
 
     return (
@@ -69,7 +88,7 @@ const GET_RESTAURANT_DISHES = gql`
                   <Button color="info"
                     outline
                     color="primary"
-                    onClick = {()=> addItem(res)}
+                    //onClick = {()=> addItem(res)}
                   >
                     + Add To Cart
                   </Button>
@@ -78,6 +97,11 @@ const GET_RESTAURANT_DISHES = gql`
               </Card>
             </Col>
           ))}
+          <Col xs="4" style={{ padding: 0 }}>
+            <div>
+              Cart in here
+            </div>
+          </Col>
         </>
         )}
         else{
