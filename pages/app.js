@@ -14,8 +14,12 @@ function MyApp(props) {
 
     return (
         <AppContext.Provider value={{isAuthenticated:false,user:null, setUser:() => {}}}>
-        <Head>
-{/*missing 7 lines of code */}         </Head>
+            <Head>
+                <link
+                    rel="stylesheet"
+                        {/*missing 3 lines of code */}
+                />
+            </Head>
             <Layout>
                 <Component {...pageProps} />
             </Layout>
